@@ -4,9 +4,64 @@ The GMVD dataset includes six distinct scenes, one indoor (subway) and five outd
 <img src="./extras/gmvd_dataset.png" height="300" width="1000">
 
 ## Download
-Please download the dataset from this [link](https://github.com/jeetv/GMVD_dataset).
+Please download the dataset from this [link](https://iiitaphyd-my.sharepoint.com/:f:/g/personal/jeet_vora_research_iiit_ac_in/EoZySkQaB2NAuBqbyGwwwX0BP4Ma33QIWdMvlJrczeQoHQ?e=2Z7xgT).
 
 ### Folder structure
+GMVD_Dataset
+├── test
+│   ├── gta_scene5
+│   └── gta_scene6
+└── train
+    ├── gta_scene1_A
+    │   ├── annotations_positions
+    │   │   ├── 00000.json
+    │   │   ├── 00001.json
+    │   │   └── *
+    │   ├── calibrations
+    │   │   ├── extrinsic
+    │   │   │   ├── extr_Camera1.xml
+    │   │   │   ├── extr_Camera2.xml
+    │   │       └── *	
+    │   │   └── intrinsic
+    │   │       ├── intr_Camera1.xml
+    │   │       ├── intr_Camera2.xml
+    │   │       └── *
+    │   ├── config.json
+    │   ├── gt.txt
+    │   ├── Image_subsets
+    │   │   ├── C1
+    │   │   ├── C2
+    │   │   └── *
+    │   ├── matchings
+    │   │   ├── Camera1_3d.txt
+    │   │   ├── Camera1.txt
+    │   │   ├── Camera2_3d.txt
+    │   │   ├── Camera2.txt
+    │   │   └── *
+    │   └── rectangles.pom
+    ├── gta_scene1_B
+    ├── gta_scene2
+    ├── gta_scene3_A
+    ├── gta_scene3_B
+    ├── unity_scene1
+    └── unity_scene2
+    
+## Dataset Configurations
+Each and every scene in dataset has its own configurations, specified in ```config.json``` file.
+```
+example :-
+{ 
+  "Dataset": "gta_scene1_A", 
+  "num_cam": 6, 
+  "num_frames": 323, 
+  "img_shape": [1080, 1920], 
+  "grid_shape": [800, 1200], 
+  "grid_cell": 0.025, 
+  "origin": [0,0], 
+  "region_size":[20,30]
+}
+
+```
 
 ## Experimental Setup
 * Clone this repository
