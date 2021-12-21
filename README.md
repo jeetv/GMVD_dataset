@@ -7,6 +7,7 @@ The GMVD dataset includes six distinct scenes, one indoor (subway) and five outd
 Please download the dataset from this [link](https://iiitaphyd-my.sharepoint.com/:f:/g/personal/jeet_vora_research_iiit_ac_in/EoZySkQaB2NAuBqbyGwwwX0BP4Ma33QIWdMvlJrczeQoHQ?e=2Z7xgT).
 
 ### Folder structure
+```
 GMVD_Dataset
 ├── test
 │   ├── gta_scene5
@@ -45,7 +46,8 @@ GMVD_Dataset
     ├── gta_scene3_B
     ├── unity_scene1
     └── unity_scene2
-    
+ ```
+ 
 ## Dataset Configurations
 Each and every scene in dataset has its own configurations, specified in ```config.json``` file.
 ```
