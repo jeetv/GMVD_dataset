@@ -502,7 +502,7 @@ if __name__ == '__main__':
                 train_acc_s, test_acc_s)
     
             # Save Dictionary
-            if isbest(score[epoch][0], epoch):
+            if isbest(score[epoch][0], epoch) and epoch>1:
                 torch.save(model.state_dict(), os.path.join(logdir, 'Multiview_Detection_'+str(args.dataset)+'.pth'))
             
             if args.earlystop!=0 and args.earlystop==epoch:
