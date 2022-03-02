@@ -19,17 +19,17 @@ import numpy as np
 
 
 def evaluate(res_fpath, gt_fpath, dataset='wildtrack'):
-    try:
-        import matlab.engine
+   # try:
+        #import matlab.engine
 
-        eng = matlab.engine.start_matlab()
-        eng.cd('multiview_detector/evaluation/motchallenge-devkit')
-        res = eng.evaluateDetection(res_fpath, gt_fpath, dataset)
-        recall, precision, moda, modp = np.array(res['detMets']).squeeze()[[0, 1, -2, -1]]
-    except:
-        from evaluation.pyeval.evaluateDetection import evaluateDetection_py
+        #eng = matlab.engine.start_matlab()
+        #eng.cd('multiview_detector/evaluation/motchallenge-devkit')
+        #res = eng.evaluateDetection(res_fpath, gt_fpath, dataset)
+        #recall, precision, moda, modp = np.array(res['detMets']).squeeze()[[0, 1, -2, -1]]
+    #except:
+    from evaluation.pyeval.evaluateDetection import evaluateDetection_py
 
-        recall, precision, moda, modp = evaluateDetection_py(res_fpath, gt_fpath, dataset)
+    recall, precision, moda, modp = evaluateDetection_py(res_fpath, gt_fpath, dataset)
     return recall, precision, moda, modp
 
 

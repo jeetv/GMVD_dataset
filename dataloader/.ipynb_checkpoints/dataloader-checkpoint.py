@@ -9,7 +9,7 @@ import torch
 from torchvision.transforms import ToTensor
 
 class GetDataset(VisionDataset):
-    def __init__(self, base, reID=False, train=True, transform=ToTensor(), target_transform=ToTensor(),grid_reduce=4, img_reduce=4, train_ratio=0.9):
+    def __init__(self, base, reID=False, train=True, transform=ToTensor(), target_transform=ToTensor(),grid_reduce=4, img_reduce=4, train_ratio=0.9, sample_require=1):
         # parameters in super can be accessed as (self.param) eg:- self.transform, self.target_transform
         super().__init__(base.root, transform=transform, target_transform=target_transform)
         self.base = base
@@ -17,6 +17,7 @@ class GetDataset(VisionDataset):
         self.root, self.num_cam, self.num_frames = base.root, base.num_cam, base.num_frames
         self.dataset_name = base.dataset_name
         self.img_shape, self.world_grid_shape = base.img_shape, base.world_grid_shape  # H,W; N_row,N_col
+        self.skip_frame_ratio = int(self.num_frames//sample_require)
         
         # Reduce grid [480,1440] by factor of 4.
         self.grid_reduce = grid_reduce
@@ -38,11 +39,12 @@ class GetDataset(VisionDataset):
         self.map_kernel[0, 0] = torch.from_numpy(map_kernel)
         
         # Split train/test data
-        
+        print(self.skip_frame_ratio)
+        print(train_ratio)
         if train:
-            frame_range = range(0,int(train_ratio*self.num_frames))
+            frame_range = range(0,int(train_ratio*self.num_frames), self.skip_frame_ratio)
         else:
-            frame_range = range(int(train_ratio*self.num_frames), self.num_frames)
+            frame_range = range(int(train_ratio*self.num_frames), self.num_frames, self.skip_frame_ratio)
         
         ############ Cam set Selection ############
         #frame_range = range(0,self.num_frames) 
@@ -62,6 +64,8 @@ class GetDataset(VisionDataset):
                     all_pedestrians = json.load(json_file)
                 i_s, j_s, v_s = [], [], []
                 for single_pedestrian in all_pedestrians:
+                    if single_pedestrian is None:
+                        continue
                     x, y = self.base.get_worldgrid_from_pos(single_pedestrian['positionID'])
                     if self.base.indexing == 'xy':
                         i_s.append(int(y / self.grid_reduce))
@@ -77,6 +81,8 @@ class GetDataset(VisionDataset):
         frame = list(self.gt_map.keys())[index]
         imgs = []
         for cam in range(self.num_cam):
+            #print(cam)
+            #print(frame)
             fpath = self.img_fpath[cam][frame]
             img = Image.open(fpath).convert('RGB')
             if self.transform is not None:
@@ -88,7 +94,7 @@ class GetDataset(VisionDataset):
             map_gt = (map_gt > 0).int()
         if self.target_transform is not None:
             map_gt = self.target_transform(map_gt)
-        return imgs, map_gt.float(), frame, self.dataset_name
+        return imgs, map_gt.float(), frame, self.root
     
     def __len__(self):
         # length of dataset

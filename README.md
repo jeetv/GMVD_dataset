@@ -1,12 +1,12 @@
 # GMVD Dataset [[arXiv](https://arxiv.org/abs/2109.12227)]
-The GMVD dataset contributes to generalized multi-view detection with overlapping field-of-view. We build a synthetic dataset for multi-view detection using Grand theft Auto V (GTAV) and Unity Game Engine. The GMVD dataset includes seven distinct scenes, one indoor (subway) and six outdoors. One of the scenes are reserved for the test split. We vary the number of total cameras in each scene and provide different camera configurations within a scene. Additional salient features of GMVD include daytime variations (morning, afternoon, evening, night) and weather variations (sunny, cloudy, rainy, snowy). The images in the dataset are of high resolution, 1920x1080, and are synchronized. Average coverage varies from 2.76-6.4 cameras depending on the scene. The dataset can also be useful for the task of multi-view pedestrian tracking with the total of approx. 1,25,000 frames with track labels.
+The GMVD dataset contributes to generalized multi-view detection with overlapping field-of-view. We build a synthetic dataset for multi-view detection using Grand theft Auto V (GTAV) and Unity Game Engine. The GMVD dataset includes seven distinct scenes, one indoor (subway) and six outdoors. One of the scenes are reserved for the test split. We vary the number of total cameras in each scene and provide different camera configurations within a scene. Additional salient features of GMVD include daytime variations (morning, afternoon, evening, night) and weather variations (sunny, cloudy, rainy, snowy). The images in the dataset are of high resolution, 1920x1080, and are synchronized. Average coverage varies from 2.76-6.4 cameras depending on the scene.
 <img src="./extras/gmvd_dataset.png" height="300" width="1000">
 
-|Dataset | Track Labels | IDs | # Scenes | # Training Frames | # Testing Frames | # Cameras  | # Sequences |  Avg. Coverage | Resolution
-|------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------  | ------------- |  ------------- |------------- |
-|WildTrack | ✓ | 313 | 1 | 360 | 40 | 7 | 1 | 3.74 | 1920X1080 |
-|MultiViewX | ✓  |350 | 1 | 360 | 40 | 6 | 1 | 4.41 | 1920X1080 |
-|GMVD (Ours) | ✓ | 2800 | 7 | 4983 | 1012 | 3, 5, 6, 7, 8 | 53 | 2.76 - 6.4 | 1920X1080 |
+|Dataset | IDs | # Scenes | # Training Frames | # Testing Frames | # Cameras  | # Sequences |  Avg. Coverage | Resolution
+|-------------| ------------- | ------------- | ------------- | ------------- | -------------  | ------------- |  ------------- |------------- |
+|WildTrack | 313 | 1 | 360 | 40 | 7 | 1 | 3.74 | 1920X1080 |
+|MultiViewX |350 | 1 | 360 | 40 | 6 | 1 | 4.41 | 1920X1080 |
+|GMVD (Ours) | 2800 | 7 | 4983 | 1012 | 3, 5, 6, 7, 8 | 53 | 2.76 - 6.4 | 1920X1080 |
 
 ## Download
 Please download the dataset from this [link](https://iiitaphyd-my.sharepoint.com/:f:/g/personal/jeet_vora_research_iiit_ac_in/EoZySkQaB2NAuBqbyGwwwX0BP4Ma33QIWdMvlJrczeQoHQ?e=2Z7xgT).

@@ -10,9 +10,9 @@ import re
 from torchvision.datasets import VisionDataset
 
 intrinsic_camera_matrix_filenames = ['intr_Camera1.xml', 'intr_Camera2.xml', 'intr_Camera3.xml', 'intr_Camera4.xml',
-                                     'intr_Camera5.xml', 'intr_Camera6.xml', 'intr_Camera7.xml']
+                                     'intr_Camera5.xml', 'intr_Camera6.xml', 'intr_Camera7.xml', 'intr_Camera8.xml']
 extrinsic_camera_matrix_filenames = ['extr_Camera1.xml', 'extr_Camera2.xml', 'extr_Camera3.xml', 'extr_Camera4.xml',
-                                     'extr_Camera5.xml', 'extr_Camera6.xml', 'extr_Camera7.xml']
+                                     'extr_Camera5.xml', 'extr_Camera6.xml', 'extr_Camera7.xml', 'extr_Camera8.xml']
 
 class MultiviewX(VisionDataset):
     def __init__(self, root, cam_set, train_cam, test_cam):
@@ -128,13 +128,21 @@ class MultiviewX(VisionDataset):
         return self.get_pos_from_worldgrid(grid)
     
     def get_image_paths(self, frame_range):
+        #print('CHECK!!!!!!!!!!!')
         img_fpaths = {cam: {} for cam in range(self.num_cam)}
-        for camera_folder in sorted(os.listdir(os.path.join(self.root, 'Image_subsets'))):
-            cam = int(camera_folder[-1]) - 1
-            for fname in sorted(os.listdir(os.path.join(self.root, 'Image_subsets', camera_folder))):
-                frame = int(fname.split('.')[0])
-                if frame in frame_range:
-                    img_fpaths[cam][frame] = os.path.join(self.root, 'Image_subsets', camera_folder, fname)
+        path = os.path.join(self.root, 'Image_subsets')
+        for camera_folder in sorted(os.listdir(path)):
+            #print(os.path.join(path,camera_folder[-1]))
+            
+            if os.path.isdir(os.path.join(path,camera_folder)):
+                #print('LOL')
+                print(camera_folder)
+                cam = int(camera_folder[-1]) - 1
+                for fname in sorted(os.listdir(os.path.join(self.root, 'Image_subsets', camera_folder))):
+                    frame = int(fname.split('.')[0])
+                    # print(frame)
+                    if frame in frame_range:
+                        img_fpaths[cam][frame] = os.path.join(self.root, 'Image_subsets', camera_folder, fname)
                     
         return img_fpaths
     
@@ -146,6 +154,8 @@ class MultiviewX(VisionDataset):
             with open(os.path.join(self.root, 'annotations_positions', fname)) as json_file:
                 all_pedestrians = json.load(json_file)
             for single_pedestrian in all_pedestrians:
+                if single_pedestrian is None:
+                    continue
                 if single_pedestrian['personID'] not in ped_id:
                     ped_id[single_pedestrian['personID']] = 1
                     def is_in_cam(cam):

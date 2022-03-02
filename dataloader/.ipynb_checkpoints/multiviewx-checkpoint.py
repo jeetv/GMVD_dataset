@@ -10,9 +10,9 @@ import re
 from torchvision.datasets import VisionDataset
 
 intrinsic_camera_matrix_filenames = ['intr_Camera1.xml', 'intr_Camera2.xml', 'intr_Camera3.xml', 'intr_Camera4.xml',
-                                     'intr_Camera5.xml', 'intr_Camera6.xml']
+                                     'intr_Camera5.xml', 'intr_Camera6.xml', 'intr_Camera7.xml', 'intr_Camera8.xml']
 extrinsic_camera_matrix_filenames = ['extr_Camera1.xml', 'extr_Camera2.xml', 'extr_Camera3.xml', 'extr_Camera4.xml',
-                                     'extr_Camera5.xml', 'extr_Camera6.xml']
+                                     'extr_Camera5.xml', 'extr_Camera6.xml', 'extr_Camera7.xml', 'extr_Camera8.xml']
 
 class MultiviewX(VisionDataset):
     def __init__(self, root, cam_set, train_cam, test_cam):
@@ -128,13 +128,21 @@ class MultiviewX(VisionDataset):
         return self.get_pos_from_worldgrid(grid)
     
     def get_image_paths(self, frame_range):
+        #print('CHECK!!!!!!!!!!!')
         img_fpaths = {cam: {} for cam in range(self.num_cam)}
-        for camera_folder in sorted(os.listdir(os.path.join(self.root, 'Image_subsets'))):
-            cam = int(camera_folder[-1]) - 1
-            for fname in sorted(os.listdir(os.path.join(self.root, 'Image_subsets', camera_folder))):
-                frame = int(fname.split('.')[0])
-                if frame in frame_range:
-                    img_fpaths[cam][frame] = os.path.join(self.root, 'Image_subsets', camera_folder, fname)
+        path = os.path.join(self.root, 'Image_subsets')
+        for camera_folder in sorted(os.listdir(path)):
+            #print(os.path.join(path,camera_folder[-1]))
+            
+            if os.path.isdir(os.path.join(path,camera_folder)):
+                #print('LOL')
+                print(camera_folder)
+                cam = int(camera_folder[-1]) - 1
+                for fname in sorted(os.listdir(os.path.join(self.root, 'Image_subsets', camera_folder))):
+                    frame = int(fname.split('.')[0])
+                    # print(frame)
+                    if frame in frame_range:
+                        img_fpaths[cam][frame] = os.path.join(self.root, 'Image_subsets', camera_folder, fname)
                     
         return img_fpaths
     
@@ -142,20 +150,25 @@ class MultiviewX(VisionDataset):
         og_gt = []
         for fname in sorted(os.listdir(os.path.join(self.root, 'annotations_positions'))):
             frame = int(fname.split('.')[0])
+            ped_id = {}
             with open(os.path.join(self.root, 'annotations_positions', fname)) as json_file:
                 all_pedestrians = json.load(json_file)
             for single_pedestrian in all_pedestrians:
-                def is_in_cam(cam):
-                    return not (single_pedestrian['views'][cam]['xmin'] == -1 and
-                                single_pedestrian['views'][cam]['xmax'] == -1 and
-                                single_pedestrian['views'][cam]['ymin'] == -1 and
-                                single_pedestrian['views'][cam]['ymax'] == -1)
-
-                in_cam_range = sum(is_in_cam(cam) for cam in range(self.num_cam))
-                if not in_cam_range:
+                if single_pedestrian is None:
                     continue
-                grid_x, grid_y = self.get_worldgrid_from_pos(single_pedestrian['positionID'])
-                og_gt.append(np.array([frame, grid_x, grid_y]))
+                if single_pedestrian['personID'] not in ped_id:
+                    ped_id[single_pedestrian['personID']] = 1
+                    def is_in_cam(cam):
+                        return not (single_pedestrian['views'][cam]['xmin'] == -1 and
+                                    single_pedestrian['views'][cam]['xmax'] == -1 and
+                                    single_pedestrian['views'][cam]['ymin'] == -1 and
+                                    single_pedestrian['views'][cam]['ymax'] == -1)
+
+                    in_cam_range = sum(is_in_cam(cam) for cam in range(self.num_cam))
+                    if not in_cam_range:
+                        continue
+                    grid_x, grid_y = self.get_worldgrid_from_pos(single_pedestrian['positionID'])
+                    og_gt.append(np.array([frame, grid_x, grid_y]))
         og_gt = np.stack(og_gt, axis=0)
         os.makedirs(os.path.dirname(self.gt_fname), exist_ok=True)
         np.savetxt(self.gt_fname, og_gt, '%d')

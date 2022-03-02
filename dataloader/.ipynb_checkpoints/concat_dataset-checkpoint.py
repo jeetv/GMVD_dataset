@@ -12,7 +12,7 @@ class ConcatDataset(torch.utils.data.ConcatDataset):
     def __init__(self, *datasets):
         super(ConcatDataset, self).__init__(datasets)
         #self.datasets = datasets
-        self.dataset_list = list(d.root.split('/')[-1] for d in datasets)
+        self.dataset_list = list(d.root for d in datasets)#list(d.root.split('/')[-1] for d in datasets)
         print(self.dataset_list)
         self.dicts = {}
         for i,d in enumerate(self.datasets):
