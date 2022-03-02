@@ -14,11 +14,13 @@ Please download the dataset from this [link](https://iiitaphyd-my.sharepoint.com
 ### Folder structure
 ```
 GMVD_Dataset
-├── test
-│   ├── gta_scene5
-│   └── gta_scene6
-└── train
-    ├── gta_scene1_A
+├── vid2frame.py
+├── DATASETS
+│   ├── scene1
+│   ├── *
+│   └── scene6
+└── detect
+    ├── gta_scene5
     │   ├── annotations_positions
     │   │   ├── 00000.json
     │   │   ├── 00001.json
@@ -45,10 +47,6 @@ GMVD_Dataset
     │   │   ├── Camera2.txt
     │   │   └── *
     │   └── rectangles.pom
-    ├── gta_scene1_B
-    ├── gta_scene2
-    ├── gta_scene3_A
-    ├── gta_scene3_B
     ├── unity_scene1
     └── unity_scene2
  ```
@@ -77,18 +75,18 @@ example :-
 
 ## Training
 ```
-[GMVD]$ python main.py -d gmvd_train -b 1 --avgpool --cls_thres 0.26
+[GMVD]$ python main.py -d gmvd_train -b 1 --avgpool --cls_thres 0.2
 ```
 ## Inference
 * Note : --cls_thres is the parameter need to be tuned to get appropriate results.
 * Download the pretrained weights from this [link](https://iiitaphyd-my.sharepoint.com/:f:/g/personal/jeet_vora_research_iiit_ac_in/EoZySkQaB2NAuBqbyGwwwX0BP4Ma33QIWdMvlJrczeQoHQ?e=2Z7xgT)
 * Inference on Wildtrack dataset
 ```
-[GMVD]$ python main.py -d wildtrack --avgpool --resume trained_models/gmvd/Multiview_Detection_gmvd.pth --cls_thres 0.26
+[GMVD]$ python main.py -d wildtrack --avgpool --resume trained_models/gmvd/Multiview_Detection_gmvd.pth --cls_thres 0.24
 ```
 * Inference on GMVD test set
 ```
-[GMVD]$ python main.py -d gmvd_test --avgpool --resume trained_models/gmvd/Multiview_Detection_gmvd.pth --cls_thres 0.28
+[GMVD]$ python main.py -d gmvd_test --avgpool --resume trained_models/gmvd/Multiview_Detection_gmvd.pth --cls_thres 0.17
 ```
 ## License and Important Note
 This dataset is for educational and non-commercial research purpose only. GMVD Dataset is licensed under a [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
