@@ -489,8 +489,8 @@ if __name__ == '__main__':
             if isbest(score[epoch][0], epoch) :#and epoch>1:
                 torch.save(model.state_dict(), os.path.join(logdir, 'Multiview_Detection_'+str(args.dataset)+'.pth'))
             
-            if MODA < 50.0 and epoch>5:
-                break
+            #if MODA < 50.0 and epoch>5:
+            #    break
             torch.save(model.state_dict(), os.path.join(logdir, 'Multiview_Detection_'+str(args.dataset)+'_'+str(epoch)+'.pth'))
             
         moda, modp, prec, rec = score[idx]
