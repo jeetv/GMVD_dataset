@@ -37,7 +37,7 @@ class MultiView_Detection(nn.Module):
         self.coord_map = self.get_coord_map(self.reducedgrid_shape + [1])
         '''
         # Resnet18
-        self.base_arch = nn.Sequential(*list(backbone_model.children())[:-2]).to('cuda:1')
+        self.base_arch = nn.Sequential(*list(backbone_model.children())[:-2]).to('cuda:0')
         '''
         for param in base_arch.parameters():
             param.requires_grad = False
@@ -105,7 +105,7 @@ class MultiView_Detection(nn.Module):
                 
             # imgs[batch, cam, channel, h, w]
             #print(cam)
-            img_feature = self.base_arch(imgs[:, cam].to('cuda:1'))
+            img_feature = self.base_arch(imgs[:, cam].to('cuda:0'))
             #img_feature = self.base_pt2(img_feature.to('cuda:0'))
             img_feature = F.interpolate(img_feature, upsample_shape, mode='bilinear')
             
@@ -129,7 +129,7 @@ class MultiView_Detection(nn.Module):
                 plt.close(fig)
                 '''
             else:
-                world_feature = kornia.warp_perspective(img_feature, proj_mat, reducedgrid_shape)
+                world_feature = kornia.warp_perspective(img_feature.to('cuda:1'), proj_mat, reducedgrid_shape)
             ######### Concetenate features ###########
             world_features.append(world_feature)
             ##########################################
