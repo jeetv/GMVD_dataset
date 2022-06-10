@@ -256,7 +256,7 @@ if __name__ == '__main__':
     parser.add_argument('--cls_thres', type=float, default=0.4)
     parser.add_argument('-d', '--dataset', type=str, default='wildtrack', choices=['wildtrack', 'multiviewx', 'gmvd_test','gmvd_train'], help='Choose dataset wildtrack/multiviewx (default: wildtrack)')
     parser.add_argument('-l', '--loss', type=str, default='klcc', choices=['klcc', 'mse'], help='Choose loss function klcc/mse. (default:klcc)' )
-    parser.add_argument('-pr', '--pretrained', default=True, action='store_true', help='Use pretrained weights (default: True)')
+    parser.add_argument('-pr', '--pretrained', default=False, action='store_true', help='Use pretrained weights (default: True)')
     parser.add_argument('-cd', '--cross_dataset', type=str, default='wildtrack', choices=['wildtrack', 'multiviewx'])
     parser.add_argument('-j', '--num_workers', type=int, default=4)
     parser.add_argument('-b', '--batch_size', type=int, default=1, metavar='N', help='input batch size for training (default: 2)')

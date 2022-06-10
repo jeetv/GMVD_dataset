@@ -6,6 +6,8 @@ import torch.nn.functional as F
 import kornia
 #from MCMT.resnet import resnet18
 import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings("ignore")
 
 class MultiView_Detection(nn.Module):
     def __init__(self, backbone_model, logdir, loss, avgpool, cam_set, len_cam_set):
@@ -13,6 +15,7 @@ class MultiView_Detection(nn.Module):
         self.logdir = logdir
         self.avgpool = avgpool
         self.cam_set = cam_set
+        self.MAX_CAM = 8
         #self.dataset = dataset
         #print(dataset.dicts)
         '''
@@ -49,7 +52,7 @@ class MultiView_Detection(nn.Module):
             if self.cam_set:
                 self.out_channel = 512 * len_cam_set + 2
             else:
-                self.out_channel = 512 * self.num_cam + 2
+                self.out_channel = 512 * self.MAX_CAM + 2
         
         # Ground Plane Convolution
         if loss == 'klcc':
@@ -61,7 +64,7 @@ class MultiView_Detection(nn.Module):
         elif loss == 'mse':
             self.map_classifier = nn.Sequential(nn.Conv2d(self.out_channel, 512, 3, padding=1), nn.ReLU(),
                                                 nn.Conv2d(512, 512, 3, padding=2, dilation=2), nn.ReLU(),
-                                                nn.Conv2d(512, 1, 3, padding=4, dilation=4, bias=False))#.to('cuda:0')
+                                                nn.Conv2d(512, 1, 3, padding=4, dilation=4, bias=False)).to('cuda:1')
 
         
     def forward(self, dataset, dataset_name, imgs, ignore_cam, duplicate_cam, random, cam_selected):
@@ -115,9 +118,9 @@ class MultiView_Detection(nn.Module):
             '''
 
             # 3x3 proj mat of cam --> repeat will make it [B,3,3]
-            proj_mat = proj_mats[cam].repeat([B, 1, 1]).float().to('cuda:0')
+            proj_mat = proj_mats[cam].repeat([B, 1, 1]).float().to('cuda:1')
             if  self.avgpool:
-                world_feature = kornia.warp_perspective(img_feature.to('cuda:0'), proj_mat, reducedgrid_shape).unsqueeze(0)
+                world_feature = kornia.warp_perspective(img_feature.to('cuda:1'), proj_mat, reducedgrid_shape).unsqueeze(0)
                 '''
                 fig = plt.figure()
                 subplt0 = fig.add_subplot(211, title="output")
@@ -141,10 +144,15 @@ class MultiView_Detection(nn.Module):
         if self.avgpool:
             world_features = torch.cat(world_features, dim=1)
             world_features = torch.mean(world_features, dim=1)    
-            world_features = torch.cat([world_features] + [coord_map.repeat([B, 1, 1, 1]).to('cuda:0')], dim=1)
+            world_features = torch.cat([world_features] + [coord_map.repeat([B, 1, 1, 1]).to('cuda:1')], dim=1)
             
         else:
-            world_features = torch.cat(world_features + [coord_map.repeat([B, 1, 1, 1]).to(device)], dim=1)
+            if num_cam < self.MAX_CAM:
+                replicate_num = self.MAX_CAM - num_cam
+                zero_vector = torch.zeros((1,512*replicate_num,reducedgrid_shape[0], reducedgrid_shape[1])).to('cuda:1')
+                world_features = torch.cat(world_features + [zero_vector] +[coord_map.repeat([B, 1, 1, 1]).to('cuda:1')], dim=1)
+            else:
+                world_features = torch.cat(world_features + [coord_map.repeat([B, 1, 1, 1]).to('cuda:1')], dim=1)
         
         
         fig = plt.figure()
