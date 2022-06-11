@@ -77,7 +77,7 @@ example :-
 
 ## Training
 ```
-[GMVD]$ python main.py -d gmvd_train -b 1 --avgpool --cls_thres 0.2
+[GMVD]$ python main.py -d gmvd_train -b 1 -pr --avgpool --cls_thres 0.2
 ```
 ## Inference
 * Note : --cls_thres is the parameter need to be tuned to get appropriate results.
