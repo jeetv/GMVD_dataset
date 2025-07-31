@@ -9,7 +9,7 @@ The GMVD dataset contributes to generalized multi-view detection with overlappin
 |GMVD (Ours) | 2800 | 7 | 4983 | 1012 | 3, 5, 6, 7, 8 | 53 | 2.76 - 6.4 | 1920X1080 |
 
 ## Download
-* Please download the dataset from this [link](https://iiitaphyd-my.sharepoint.com/:u:/g/personal/jeet_vora_alumni_iiit_ac_in/EZ80z5WOyvxKiPH4dU65Wn4BYzET0QwHSMywJWu_VXAzKw) (~50GB).
+* Please download the dataset from this [link](https://drive.google.com/drive/folders/1OswP7wHO2sOrj7R9GZ0KdQT5suLjymzX?usp=sharing) (~50GB).
 * Run vid2frame.py to extract frames
 ```[GMVD/GMVD_DATA]$ python vid2frame.py```
 
