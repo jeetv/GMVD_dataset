@@ -9,7 +9,7 @@ The GMVD dataset contributes to generalized multi-view detection with overlappin
 |GMVD (Ours) | 2800 | 7 | 4983 | 1012 | 3, 5, 6, 7, 8 | 53 | 2.76 - 6.4 | 1920X1080 |
 
 ## Download
-* Please download the dataset from this [link](https://drive.google.com/drive/folders/1OswP7wHO2sOrj7R9GZ0KdQT5suLjymzX?usp=sharing) (~50GB).
+* Please download the dataset from this [link](https://drive.google.com/file/d/1oC45y--LjOFkJixEE3plG_OV7y-EP571/view?usp=drive_link) (~50GB).
 * Run vid2frame.py to extract frames
 ```[GMVD/GMVD_DATA]$ python vid2frame.py```
 
@@ -81,7 +81,7 @@ example :-
 ```
 ## Inference
 * Note : --cls_thres is the parameter need to be tuned to get appropriate results.
-* Download the pretrained weights from this [link](https://iiitaphyd-my.sharepoint.com/:f:/g/personal/jeet_vora_research_iiit_ac_in/EoZySkQaB2NAuBqbyGwwwX0BP4Ma33QIWdMvlJrczeQoHQ?e=2Z7xgT)
+* Download the pretrained weights from this [link](https://drive.google.com/drive/folders/1GXlJyV5HhSnY2ZlOX4kB3b_ts9cuIbQ-?usp=drive_link)
 * Inference on Wildtrack dataset
 ```
 [GMVD]$ python main.py -d wildtrack --avgpool --resume trained_models/gmvd/Multiview_Detection_gmvd.pth --cls_thres 0.24
